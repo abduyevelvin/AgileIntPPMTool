@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -20,66 +19,63 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class Backlog {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
-	
-	private Integer PTSequence = 0;
-	
-	@Column(updatable = false)
-	private String projectIdentifier;
-	
-	// OneToOne with project
-	@OneToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "project_id", nullable = false)
-	@JsonIgnore
-	private Project project;
-	
-	// OneToMany with projecttask
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "backlog")
-	private List<ProjectTask> projectTasks = new ArrayList<ProjectTask>();
-	
-	public Backlog() {
-		// TODO Auto-generated constructor stub
-	}
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    private Integer PTSequence = 0;
+    private String projectIdentifier;
 
-	public Long getId() {
-		return id;
-	}
+    //OneToOne with project
+    @OneToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name="project_id",nullable = false)
+    @JsonIgnore
+    private Project project;
 
-	public void setId(Long id) {
-		this.id = id;
-	}
+    //OneToMany projecttasks
+    @OneToMany(cascade = CascadeType.REFRESH, fetch = FetchType.EAGER, mappedBy = "backlog", orphanRemoval = true)
+    private List<ProjectTask> projectTasks = new ArrayList<>();
 
-	public Integer getPTSequence() {
-		return PTSequence;
-	}
 
-	public void setPTSequence(Integer pTSequence) {
-		PTSequence = pTSequence;
-	}
+    public Backlog() {
+    }
 
-	public String getProjectIdentifier() {
-		return projectIdentifier;
-	}
+    public Long getId() {
+        return id;
+    }
 
-	public void setProjectIdentifier(String projectIdentifier) {
-		this.projectIdentifier = projectIdentifier;
-	}
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	public Project getProject() {
-		return project;
-	}
+    public Integer getPTSequence() {
+        return PTSequence;
+    }
 
-	public void setProject(Project project) {
-		this.project = project;
-	}
+    public void setPTSequence(Integer PTSequence) {
+        this.PTSequence = PTSequence;
+    }
 
-	public List<ProjectTask> getProjectTasks() {
-		return projectTasks;
-	}
+    public String getProjectIdentifier() {
+        return projectIdentifier;
+    }
 
-	public void setProjectTasks(List<ProjectTask> projectTasks) {
-		this.projectTasks = projectTasks;
-	}
+    public void setProjectIdentifier(String projectIdentifier) {
+        this.projectIdentifier = projectIdentifier;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+    public List<ProjectTask> getProjectTasks() {
+        return projectTasks;
+    }
+
+    public void setProjectTasks(List<ProjectTask> projectTasks) {
+        this.projectTasks = projectTasks;
+    }
 	
 }

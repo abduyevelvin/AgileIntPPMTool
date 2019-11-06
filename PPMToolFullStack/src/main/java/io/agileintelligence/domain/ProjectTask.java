@@ -2,7 +2,7 @@ package io.agileintelligence.domain;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
+//import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,38 +23,28 @@ public class ProjectTask {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
-	@Column(updatable = false)
+	@Column(updatable = false, unique = true)
 	private String projectSequence;
-	
-	@NotBlank(message = "Please include a project summary!")
+	@NotBlank(message = "Please include a project summary")
 	private String summary;
-	
 	private String acceptanceCriteria;
-	
 	private String status;
-	
 	private Integer priority;
-	
 	private Date dueDate;
-	
-	// ManyToOne with backlog
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REFRESH)
+	// ManyToOne with Backlog
+	@ManyToOne(fetch = FetchType.EAGER)//, cascade = CascadeType.REFRESH
 	@JoinColumn(name = "backlog_id", updatable = false, nullable = false)
 	@JsonIgnore
 	private Backlog backlog;
-	
+
 	@Column(updatable = false)
 	private String projectIdentifier;
-	
 	private Date create_At;
-	
 	private Date update_At;
-	
+
 	public ProjectTask() {
-		// TODO Auto-generated constructor stub
 	}
-	
+
 	public Long getId() {
 		return id;
 	}
@@ -134,16 +124,6 @@ public class ProjectTask {
 	public void setUpdate_At(Date update_At) {
 		this.update_At = update_At;
 	}
-	
-	@PrePersist
-	protected void onCreate() {
-		this.create_At = new Date();
-	}
-	
-	@PreUpdate
-	protected void onUpdate() {
-		this.update_At = new Date();
-	}
 
 	public Backlog getBacklog() {
 		return backlog;
@@ -153,12 +133,22 @@ public class ProjectTask {
 		this.backlog = backlog;
 	}
 
+	@PrePersist
+	protected void onCreate() {
+		this.create_At = new Date();
+	}
+
+	@PreUpdate
+	protected void onUpdate() {
+		this.update_At = new Date();
+	}
+
 	@Override
 	public String toString() {
-		return "ProjectTask [id=" + id + ", projectSequence=" + projectSequence + ", summary=" + summary
-				+ ", acceptanceCriteria=" + acceptanceCriteria + ", status=" + status + ", priority=" + priority
-				+ ", dueDate=" + dueDate + ", projectIdentifier=" + projectIdentifier + ", create_At=" + create_At
-				+ ", update_At=" + update_At + "]";
+		return "ProjectTask{" + "id=" + id + ", projectSequence='" + projectSequence + '\'' + ", summary='" + summary
+				+ '\'' + ", acceptanceCriteria='" + acceptanceCriteria + '\'' + ", status='" + status + '\''
+				+ ", priority=" + priority + ", dueDate=" + dueDate + ", backlog=" + backlog + ", projectIdentifier='"
+				+ projectIdentifier + '\'' + ", create_At=" + create_At + ", update_At=" + update_At + '}';
 	}
-	
+
 }
